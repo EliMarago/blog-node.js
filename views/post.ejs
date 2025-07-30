@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= post.title %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="titolo-post"><%= post.title %></h2>
+      <p class="content"><%= post.content %></p>
+      <form
+        action="/api/posts/delete/<%= post.id %>"
+        method="POST"
+        onsubmit="return confirm('Confermi di voler eliminare il post?')"
+      >
+        <button class="btn-delete" type="submit">Delete</button>
+      </form>
+      <button class="btn-home"><a href="/">Torna alla Home</a></button>
+    </div>
+  </body>
+</html>

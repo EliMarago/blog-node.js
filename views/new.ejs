@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Nuovo Post</title>
+  </head>
+  <body>
+    <h2>Crea un nuovo Post</h2>
+    <form method="POST" action="/posts">
+      <input type="text" name="title" placeholder="Titolo" required />
+      <br />
+      <textarea name="content" placeholder="Contenuto" required></textarea>
+      <br />
+      <button class="pubblica-btn" type="submit">Pubblica</button>
+    </form>
+    <button class="btn-home"><a href="/">Torna alla Home</a></button>
+  </body>
+</html>
