@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import bodyParser from "body-parser";
 import path from "path";
 import axios from "axios";
@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 
 const app = express();
 const port = 3000;
+const API_URL = "http://localhost:4000";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,13 +22,21 @@ let posts = [
 ];
 
 //rotta principale
-app.get("/", (req, res) => {
-  res.render("index", { posts });
+app.get("/", async (req, res) => {
+  try {
+    const response = await axios.get(`${API_URL}/posts`);
+    res.render("index", { posts: response.data });
+  } catch (error) {
+    res.status(500).send("Errore nel recupero dei post");
+  }
 });
-app.get("/posts/:id", (req, res) => {
-  const post = posts.find((p) => p.id === parseInt(req.params.id));
-  if (!post) return res.status(404).send("Post non trovato");
-  res.render("Post", { post });
+app.get("/posts/:id", async (req, res) => {
+  try {
+    const response = await axios.get(`${API_URL}/posts/${req.params.id}`);
+    res.render("Post", { post: response.data });
+  } catch (error) {
+    res.status(404).send("Post non trovato");
+  }
 });
 //form nuovo post
 app.get("/new", (req, res) => {
@@ -52,10 +61,12 @@ app.post("/posts", (req, res) => {
   res.redirect("/");
 });
 app.post("/api/posts/delete/:id", async (req, res) => {
+  const postId = req.params.id;
   try {
-    await axios.delete(`${API_URL}/posts/${req.params.id}`);
-    res.redirect("/");
-  } catch {
+    await axios.delete(`${API_URL}/posts/${postId}`);
+    res.redirect("/?success=Post eliminato con successo");
+  } catch (error) {
+    console.error("Errore cancellazione post", error.message);
     res.status(500).send("Errore nella cancellazione del post");
   }
 });

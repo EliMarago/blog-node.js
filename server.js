@@ -44,6 +44,14 @@ app.delete("/posts/:id", (req, res) => {
     res.status(404).json({ error: "Post non trovato" });
   }
 });
+app.get("/posts/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const post = posts.find((p) => p.id === id);
+  if (!post) {
+    return res.status(404).json({ error: "Post non trovato" });
+  }
+  res.json(post);
+});
 
 app.listen(port, () => {
   console.log(`📡 API server running at http://localhost:${port}`);
